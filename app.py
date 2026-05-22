@@ -281,7 +281,6 @@ with col2:
 if auto_refresh:
     st.caption("Syncing live from 2026 servers... Next update in 60s.")
     # In a real deployed app, Streamlit handles the refresh loop
-   pip install requestsimport requests
 
 # Your API Key
 API_KEY = 'f5e5e0614fe871e6129363b5ccdda586'
