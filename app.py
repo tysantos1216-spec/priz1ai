@@ -377,4 +377,20 @@ def fetch_and_analyze_odds():
                     print("  🔥 ARBITRAGE ALERT: Guaranteed profit found!")
 
 
-    ()
+    ()[api]
+# The Odds API - f5e5e0614fe871e6129363b5ccdda586
+key = "f5e5e0614fe871e6129363b5ccdda586"
+base_url = "https://api.the-odds-api.com/v4"
+
+[settings]
+regions = "us"
+markets = "h2h,spreads"
+odds_format = "american"
+
+[sports]
+# Listed in order of your provided data
+active = [
+    "tennis_wta_french_open",
+    "baseball_npb",
+    "baseball_kbo"
+]
