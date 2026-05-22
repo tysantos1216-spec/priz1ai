@@ -323,4 +323,61 @@ def get_nba_odds():
         print(f'\nRemaining Requests: {response.headers.get("x-requests-remaining")}')
 
 if __name__ == "__main__":
-    get_nba_odds() 
+    get_nba_odds()  import requests
+
+# Configuration
+API_KEY = 'f5e5e0614fe871e6129363b5ccdda586'
+# Common sports from your data
+SPORTS = ['tennis_wta_french_open', 'baseball_npb', 'baseball_kbo']
+
+def fetch_and_analyze_odds():
+    for sport in SPORTS:
+        url = f'https://api.the-odds-api.com/v4/sports/{sport}/odds'
+        params = {
+            'api_key': API_KEY,
+            'regions': 'us',
+            'markets': 'h2h',
+            'oddsFormat': 'american'
+        }
+
+        response = requests.get(url, params=params)
+        
+        if response.status_code != 200:
+            print(f"Failed to fetch {sport}: {response.status_code}")
+            continue
+
+        data = response.json()
+        print(f"\n--- Analyzing {sport.replace('_', ' ').upper()} ---")
+
+        for game in data:
+            home_team = game['home_team']
+            away_team = game['away_team']
+            
+            # Extract all prices for both sides
+            prices = {home_team: [], away_team: []}
+            
+            for bookie in game['bookmakers']:
+                for market in bookie['markets']:
+                    if market['key'] == 'h2h':
+                        for outcome in market['outcomes']:
+                            prices[outcome['name']].append({
+                                'book': bookie['title'],
+                                'price': outcome['price']
+                            })
+
+            # Logic: Find the highest price for each team
+            if prices[home_team] and prices[away_team]:
+                best_home = max(prices[home_team], key=lambda x: x['price'])
+                best_away = max(prices[away_team], key=lambda x: x['price'])
+
+                print(f"Matchup: {home_team} vs {away_team}")
+                print(f"  Best {home_team}: {best_home['price']} ({best_home['book']})")
+                print(f"  Best {away_team}: {best_away['price']} ({best_away['book']})")
+
+                # Arbitrage Detection (Simplified American Odds Check)
+                # If both are positive, or spread is thin, it flags for review
+                if best_home['price'] > 100 and best_away['price'] > 100:
+                    print("  🔥 ARBITRAGE ALERT: Guaranteed profit found!")
+
+if __name__ == "__main__":
+    fetch_and_analyze_odds()
