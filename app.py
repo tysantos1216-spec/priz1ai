@@ -379,5 +379,5 @@ def fetch_and_analyze_odds():
                 if best_home['price'] > 100 and best_away['price'] > 100:
                     print("  🔥 ARBITRAGE ALERT: Guaranteed profit found!")
 
-if __name__ == "__main__":
-    fetch_and_analyze_odds()
+
+    ()
