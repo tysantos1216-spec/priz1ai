@@ -113,4 +113,4 @@ with tab3:
         total_pnl = df_history['Profit'].sum()
         st.metric("Total P&L", f"${total_pnl}")
     else:
-        st.info("No bets logged yet. Start tracking your wins!")API_KEY = "your_the_odds_api_key_here"
+        st.info("No bets logged yet. Start tracking your wins!")
