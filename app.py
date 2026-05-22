@@ -433,4 +433,9 @@ for sport in target_sports:
                 # Pulling the first market (H2H)
                 outcomes = bookie['markets'][0]['outcomes']
                 prices = {o['name']: o['price'] for o in outcomes}
-                print(f"  - {bookie['title']:<12}: {prices}")
+                print(f"  - {bookie['title']:<12}: {prices}") import tomllib # Python 3.11+
+
+with open("secrets.toml", "rb") as f:
+    config = tomllib.load(f)
+
+API_KEY = config["auth"]["api_key"]
