@@ -322,8 +322,7 @@ def get_nba_odds():
         # 4. Check Usage Quota (Important for free keys)
         print(f'\nRemaining Requests: {response.headers.get("x-requests-remaining")}')
 
-if __name__ == "__main__":
-   
+if __name__ == "__main__"
 # Configuration
 API_KEY = 'f5e5e0614fe871e6129363b5ccdda586'
 # Common sports from your data
