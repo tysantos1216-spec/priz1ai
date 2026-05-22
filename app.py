@@ -376,26 +376,10 @@ def fetch_and_analyze_odds():
                 if best_home['price'] > 100 and best_away['price'] > 100:
                     print("  🔥 ARBITRAGE ALERT: Guaranteed profit found!")
 
-
-    ()[api]
-# The Odds API - f5e5e0614fe871e6129363b5ccdda586
-key = "f5e5e0614fe871e6129363b5ccdda586"
-base_url = "https://api.the-odds-api.com/v4"
-
-[settings]
-regions = "us"
-markets = "h2h,spreads"
-odds_format = "american"
-
-[sports]
-# Listed in order of your provided data
-active = [
-    "tennis_wta_french_open",
-    "baseball_npb",
-    "baseball_kbo"
-]import tomllib # Python 3.11+
+import tomllib # Python 3.11+
 
 with open("secrets.toml", "rb") as f:
     config = tomllib.load(f)
 
 API_KEY = config["auth"]["api_key"]
+    ()
