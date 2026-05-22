@@ -382,4 +382,55 @@ with open("secrets.toml", "rb") as f:
     config = tomllib.load(f)
 
 API_KEY = config["auth"]["api_key"]
-    ()
+import requests
+import json
+
+class OddsAPI:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = "https://api.the-odds-api.com/v4/sports"
+
+    def get_odds(self, sport_key, regions='us', markets='h2h'):
+        """Fetches live odds for a specific sport."""
+        endpoint = f"{self.base_url}/{sport_key}/odds"
+        params = {
+            'api_key': self.api_key,
+            'regions': regions,
+            'markets': markets,
+            'oddsFormat': 'american'
+        }
+        
+        response = requests.get(endpoint, params=params)
+        
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Error {response.status_code}: {response.text}")
+            return None
+
+# --- EXECUTION ---
+API_KEY = 'f5e5e0614fe871e6129363b5ccdda586'
+scanner = OddsAPI(API_KEY)
+
+# List of sports from your raw data
+target_sports = [
+    'tennis_wta_french_open',
+    'baseball_kbo',
+    'baseball_npb'
+]
+
+for sport in target_sports:
+    print(f"\n--- SCANNING: {sport.upper()} ---")
+    data = scanner.get_odds(sport)
+    
+    if data:
+        for game in data:
+            home = game['home_team']
+            away = game['away_team']
+            print(f"📍 {home} vs {away}")
+            
+            for bookie in game['bookmakers']:
+                # Pulling the first market (H2H)
+                outcomes = bookie['markets'][0]['outcomes']
+                prices = {o['name']: o['price'] for o in outcomes}
+                print(f"  - {bookie['title']:<12}: {prices}")
