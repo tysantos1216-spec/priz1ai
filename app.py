@@ -1,10 +1,8 @@
-import streamlit as st
-import pandas as pd
-import requests
-import datetime
-import streamlit as st
-import pandas as pd
-import requests
+streamlit
+pandas
+requests
+apify-client
+plotly
 from apify_client import ApifyClient
 
 # SETUP & API CONFIG
