@@ -323,8 +323,7 @@ def get_nba_odds():
         print(f'\nRemaining Requests: {response.headers.get("x-requests-remaining")}')
 
 if __name__ == "__main__":
-    get_nba_odds()  import requests
-
+   
 # Configuration
 API_KEY = 'f5e5e0614fe871e6129363b5ccdda586'
 # Common sports from your data
