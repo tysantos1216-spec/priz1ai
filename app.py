@@ -442,4 +442,66 @@ with open("secrets.toml", "rb") as f:
     config = tomllib.load(f)
 
 API_KEY = config["auth"]["api_key"]
+import requests
 
+# 1. Verification of the key (Ensure no extra spaces)
+API_KEY = 'f5e5e0614fe871e6129363b5ccdda586'
+
+def test_api_connection():
+    # We use 'sports' as it's the cheapest call (0 cost on some plans)
+    url = f'https://api.the-odds-api.com/v4/sports/?api_key={API_KEY}'
+    
+    print("--- Connecting to API ---")
+    response = requests.get(url)
+    
+    # Check for specific failure reasons
+    if response.status_code == 401:
+        print("❌ ERROR: 401 Unauthorized. Your API key is likely incorrect or inactive.")
+    elif response.status_code == 429:
+        print("❌ ERROR: 429 Too Many Requests. You have hit your usage limit!")
+    elif response.status_code == 200:
+        print("✅ SUCCESS: Connection established!")
+        sports = response.json()
+        print(f"Total Sports Available: {len(sports)}")
+        
+        # Display usage status
+        remaining = response.headers.get('x-requests-remaining')
+        used = response.headers.get('x-requests-used')
+        print(f"Requests Used: {used} | Requests Remaining: {remaining}")
+    else:
+        print(f"❌ ERROR: {response.status_code}")
+        print(response.text)
+
+if __name__ == "__main__":
+    test_api_connection()
+import requests
+
+API_KEY = 'f5e5e0614fe871e6129363b5ccdda586'
+
+def diagnose_api():
+    # Calling the /sports endpoint is the standard way to check key health
+    url = f"https://api.the-odds-api.com/v4/sports/?apiKey={API_KEY}"
+    
+    print("--- 🩺 Starting API Diagnosis ---")
+    try:
+        response = requests.get(url, timeout=10)
+        
+        # Checking Status Codes
+        if response.status_code == 200:
+            print("✅ Connection: Success!")
+            print(f"📡 Remaining Quota: {response.headers.get('x-requests-remaining')}")
+            print(f"📊 Used Quota: {response.headers.get('x-requests-used')}")
+        elif response.status_code == 401:
+            print("❌ Error 401: Unauthorized. The API key is either typed wrong or deactivated.")
+        elif response.status_code == 429:
+            print("❌ Error 429: Quota Exceeded. You have 0 credits left for the month.")
+        else:
+            print(f"❌ Error {response.status_code}: {response.text}")
+
+    except requests.exceptions.ConnectionError:
+        print("❌ Network Error: Could not reach the server. Check your internet/VPN.")
+    except Exception as e:
+        print(f"❌ Unexpected Error: {e}")
+
+if __name__ == "__main__":
+    diagnose_api()
